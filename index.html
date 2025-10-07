@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Калькулятор знижки</title>
 
-  <!-- 🟡 Favicon — логотип у вкладці браузера -->
-  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/datatadix-art/discount-calculator/main/logo.png">
+  <!-- Favicon / значок у вкладці -->
+  <link rel="icon" type="image/jpg" href="https://raw.githubusercontent.com/datatadix-art/discount-calculator/main/logo2.jpg">
 
+  <!-- Іконка для iPhone ярлика -->
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/datatadix-art/discount-calculator/main/logo2.jpg">
+
+  <!-- Назва ярлика на iPhone -->
+  <meta name="apple-mobile-web-app-title" content="Калькулятор Знижки">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,8 +28,8 @@
       margin-bottom: 20px;
     }
     .logo {
-      width: 300px;        /* Збільшено логотип */
-      max-width: 40vw;     /* адаптація під мобільні */
+      width: 150px;
+      max-width: 40vw;
       height: auto;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -72,7 +80,7 @@
 </head>
 <body>
   <header>
-    <img src="https://raw.githubusercontent.com/datatadix-art/discount-calculator/main/logo.png" class="logo" alt="Логотип">
+    <img src="https://raw.githubusercontent.com/datatadix-art/discount-calculator/main/logo2.jpg" class="logo" alt="Логотип">
     <h2>Калькулятор знижки</h2>
   </header>
 
@@ -97,9 +105,10 @@
   </div>
 
   <script>
-    function formatNumber(num){ return num.toFixed(1).replace('.', ','); }
+    function formatNumber(num) {
+      return num.toFixed(1).replace('.', ',');
+    }
 
-    // Калькулятор знижки
     const retail1 = document.getElementById('retail1');
     const client1 = document.getElementById('client1');
     const discountResult = document.getElementById('discountResult');
@@ -107,15 +116,16 @@
     function calcDiscountAuto(){
       const r = parseFloat(retail1.value);
       const c = parseFloat(client1.value);
-      if (!isNaN(r) && !isNaN(c) && r>0){
-        const d = (1 - c/r)*100;
+      if (!isNaN(r) && !isNaN(c) && r > 0) {
+        const d = (1 - c / r) * 100;
         discountResult.textContent = `Знижка: ${formatNumber(d)} %`;
-      } else { discountResult.textContent = 'Знижка: —'; }
+      } else {
+        discountResult.textContent = 'Знижка: —';
+      }
     }
     retail1.addEventListener('input', calcDiscountAuto);
     client1.addEventListener('input', calcDiscountAuto);
 
-    // Калькулятор ціни
     const retail2 = document.getElementById('retail2');
     const discount2 = document.getElementById('discount2');
     const clientResult = document.getElementById('clientResult');
@@ -123,10 +133,12 @@
     function calcClientAuto(){
       const r = parseFloat(retail2.value);
       const d = parseFloat(discount2.value);
-      if (!isNaN(r) && !isNaN(d) && r>0){
-        const c = r*(1 - d/100);
+      if (!isNaN(r) && !isNaN(d) && r > 0) {
+        const c = r * (1 - d / 100);
         clientResult.textContent = `Ціна клієнта: ${formatNumber(c)} грн`;
-      } else { clientResult.textContent = 'Ціна клієнта: —'; }
+      } else {
+        clientResult.textContent = 'Ціна клієнта: —';
+      }
     }
     retail2.addEventListener('input', calcClientAuto);
     discount2.addEventListener('input', calcClientAuto);
