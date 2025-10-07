@@ -2,73 +2,62 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Калькулятор знижки</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
       margin: 0;
+      padding: 10px;
     }
-    .wrapper {
-      background: #fff;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    header {
       text-align: center;
-      gap: 25px;
+      margin-bottom: 20px;
     }
     .logo {
-      width: 140px;
+      width: 90px;
       height: auto;
-    }
-    h2 {
-      margin: 0;
-      color: #1e293b;
-      font-size: 24px;
-      font-weight: 700;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
     .container {
       display: flex;
-      justify-content: center;
-      gap: 40px;
       flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-width: 900px;
+      margin: auto;
     }
     .calc {
-      width: 270px;
-      padding: 15px 20px;
-      border-radius: 12px;
-      background: #f9fafb;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      flex: 1 1 300px;
+      min-width: 280px;
     }
-    h3 {
-      color: #334155;
-      margin-bottom: 10px;
+    h2, h3 {
+      text-align: center;
+      margin: 0 0 10px 0;
+      color: #333;
     }
     label {
       display: block;
       margin-top: 10px;
       font-weight: bold;
-      color: #475569;
-      text-align: left;
     }
     input {
       width: 100%;
       padding: 8px;
       margin-top: 5px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
       box-sizing: border-box;
     }
     .result {
-      margin-top: 12px;
+      margin-top: 10px;
       text-align: center;
       font-size: 18px;
       font-weight: bold;
@@ -77,80 +66,63 @@
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <img src="logo.png" alt="Логотип" class="logo">
+  <header>
+    <img src="https://raw.githubusercontent.com/datatadix-art/discount-calculator/main/logo.png" class="logo" alt="Логотип">
     <h2>Калькулятор знижки</h2>
+  </header>
 
-    <div class="container">
-      <!-- 🧮 ПЕРШИЙ калькулятор -->
-      <div class="calc">
-        <h3>1️⃣ Знайти % знижки</h3>
-        <label>Роздрібна ціна (грн):</label>
-        <input type="number" id="retail1" placeholder="Напр. 1000" step="0.1">
+  <div class="container">
+    <div class="calc">
+      <h3>1️⃣ Знайти % знижки</h3>
+      <label>Роздрібна ціна (грн):</label>
+      <input type="number" id="retail1" step="0.1" placeholder="Напр. 1000">
+      <label>Ціна клієнта (грн):</label>
+      <input type="number" id="client1" step="0.1" placeholder="Напр. 850">
+      <div class="result" id="discountResult">Знижка: —</div>
+    </div>
 
-        <label>Ціна клієнта (грн):</label>
-        <input type="number" id="client1" placeholder="Напр. 850" step="0.1">
-
-        <div class="result" id="discountResult">Знижка: —</div>
-      </div>
-
-      <!-- 💰 ДРУГИЙ калькулятор -->
-      <div class="calc">
-        <h3>2️⃣ Знайти ціну клієнта</h3>
-        <label>Роздрібна ціна (грн):</label>
-        <input type="number" id="retail2" placeholder="Напр. 1000" step="0.1">
-
-        <label>Знижка (%):</label>
-        <input type="number" id="discount2" placeholder="Напр. 15" step="0.1">
-
-        <div class="result" id="clientResult">Ціна клієнта: —</div>
-      </div>
+    <div class="calc">
+      <h3>2️⃣ Знайти ціну клієнта</h3>
+      <label>Роздрібна ціна (грн):</label>
+      <input type="number" id="retail2" step="0.1" placeholder="Напр. 1000">
+      <label>Знижка (%):</label>
+      <input type="number" id="discount2" step="0.1" placeholder="Напр. 15">
+      <div class="result" id="clientResult">Ціна клієнта: —</div>
     </div>
   </div>
 
   <script>
-    // Форматування числа з максимум двома знаками після коми (без зайвих нулів)
-    function formatNumber(num) {
-      return parseFloat(num.toFixed(2))
-        .toString()
-        .replace('.', ',');
-    }
+    function formatNumber(num){ return num.toFixed(1).replace('.', ','); }
 
-    // Перший калькулятор (знижка)
+    // Калькулятор знижки
     const retail1 = document.getElementById('retail1');
     const client1 = document.getElementById('client1');
     const discountResult = document.getElementById('discountResult');
 
-    function calcDiscountAuto() {
+    function calcDiscountAuto(){
       const r = parseFloat(retail1.value);
       const c = parseFloat(client1.value);
-      if (!isNaN(r) && !isNaN(c) && r > 0) {
-        const d = (1 - c / r) * 100;
+      if (!isNaN(r) && !isNaN(c) && r>0){
+        const d = (1 - c/r)*100;
         discountResult.textContent = `Знижка: ${formatNumber(d)} %`;
-      } else {
-        discountResult.textContent = "Знижка: —";
-      }
+      } else { discountResult.textContent = 'Знижка: —'; }
     }
-
     retail1.addEventListener('input', calcDiscountAuto);
     client1.addEventListener('input', calcDiscountAuto);
 
-    // Другий калькулятор (ціна клієнта)
+    // Калькулятор ціни
     const retail2 = document.getElementById('retail2');
     const discount2 = document.getElementById('discount2');
     const clientResult = document.getElementById('clientResult');
 
-    function calcClientAuto() {
+    function calcClientAuto(){
       const r = parseFloat(retail2.value);
       const d = parseFloat(discount2.value);
-      if (!isNaN(r) && !isNaN(d) && r > 0) {
-        const c = r * (1 - d / 100);
+      if (!isNaN(r) && !isNaN(d) && r>0){
+        const c = r*(1 - d/100);
         clientResult.textContent = `Ціна клієнта: ${formatNumber(c)} грн`;
-      } else {
-        clientResult.textContent = "Ціна клієнта: —";
-      }
+      } else { clientResult.textContent = 'Ціна клієнта: —'; }
     }
-
     retail2.addEventListener('input', calcClientAuto);
     discount2.addEventListener('input', calcClientAuto);
   </script>
